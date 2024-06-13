@@ -43,7 +43,7 @@ class Login extends Component<{},State> {
         e.preventDefault();
 
         const { formData, submittedData } = this.state;
-        const match = submittedData.find(
+        const match = submittedData.some(
             (data) =>
                 data.username === formData.username &&
                 data.email === formData.email &&
@@ -131,3 +131,6 @@ class Login extends Component<{},State> {
 }
 
 export default Login;
+
+
+

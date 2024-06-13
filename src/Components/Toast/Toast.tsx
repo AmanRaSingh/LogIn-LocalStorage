@@ -1,63 +1,80 @@
-import React, { Component } from 'react'
-interface showPopup {
-    show: boolean;
-    toastmessage: String;
+
+import { Component } from 'react';
+
+interface ShowData {
+    confirmMessage: string;
+    cancelMessage: string;
     popup: boolean;
+    confirmPopup: boolean;
+    cancelPopup: boolean;
+    condition:boolean
 }
 
-export default class Toast extends Component<{}, showPopup> {
+export default class Toast extends Component<{}, ShowData> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            show: false,
-            toastmessage: '',
+            confirmPopup: false,
+            confirmMessage: "",
             popup: false,
-        }
+            cancelPopup: false,
+            cancelMessage: '',
+            condition:false
+        };
     }
-    handleshowPopup = () => {
-        this.setState({ popup: true })
-    }
-    handleconfirm = () => {
-        this.setState({ show: true, popup: true, toastmessage: 'confirmed' })
-        console.log('confirmed')
-        setTimeout(() => {
-            this.setState({ show: false })
 
-        }, 3000);
-    }
-    handlecancel = () => {
-        this.setState({ show: true, popup: true, toastmessage: 'cancelled' })
-        console.log('cancelled')
-        setTimeout(() => {
-            this.setState({ show: false })
+    handleClick = () => {
+        console.log("click");
+        this.setState({ confirmPopup: true, cancelPopup: true });
+        this.setState({popup:true})
+        // this.setState({ popup: condition ? true : false });
 
+    };
+
+    handleConfirm = () => {
+        console.log("confirm clicked");
+        this.setState({ confirmMessage: "confirm clicked" })
+        setTimeout(() => {
+            this.setState({ confirmMessage: '' });
         }, 3000);
-    }
+    };
+
+    handleCancel = () => {
+        console.log("cancel clicked");
+        this.setState({ cancelMessage: "cancel clicked" })
+        setTimeout(() => {
+
+            this.setState({ cancelMessage: "" })
+        }, 5000)
+    };
+
     render() {
-        const { show, toastmessage, popup } = this.state
         return (
-            <div>
-                <div className='h-[60vh] w-[50vw] bg-red-300 rounded-md'>
-                    <h1 className='text-3xl text-center '>Toast Message</h1>
-                    <p>Notification Message on a piece of information displayed above the page content</p>
-                    <button onClick={this.handleshowPopup} className='h-[5vh] w-[7vw] rounded-md bg-green-300'>Show</button>
+            <>
+                <h1>Toast</h1>
+                <button onClick={this.handleClick}>open</button>
+                {this.state.popup && (
+                    <div style={{ backgroundColor: "aqua", height: "15rem", width: "30%" }}>
+                        <h1>Toast PopUp Boxes</h1>
+                        <p>User Clicked</p>
 
-                    <div className='h-[20vh] w-[30vh] bg-sky-400 m-auto'>
-                        {popup && (
-                            <div>
-                                <p>are you sure about?</p>
-                                <button onClick={this.handleconfirm} className='h-[5vh] w-[7vw] ml-4 rounded-md bg-green-300'>Confirm</button>
-                                <button onClick={this.handlecancel} className='h-[5vh] w-[7vw]  ml-4 rounded-md bg-green-300'>Cancel</button>
-
-                            </div>
+                        {this.state.confirmPopup && (
+                            <div> <button onClick={this.handleConfirm}>Confirm</button></div>
                         )}
-                        {show && (
-                            <div>
-                                {toastmessage}
-                            </div>
+
+                        {this.state.confirmMessage && (
+                            <div style={{backgroundColor:"red" ,width:"30%" ,margin:"top"}}>{this.state.confirmMessage}</div>
+                        )}
+                        {this.state.cancelPopup && (
+                            <button onClick={this.handleCancel}>Cancle</button>
+                        )}
+                        {this.state.cancelMessage && (
+                            <p>{this.state.cancelMessage}</p>
                         )}
                     </div>
-                </div>
-            </div>)
+                )}
+            </>
+        );
     }
 }
+

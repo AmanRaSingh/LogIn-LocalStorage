@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { TextField, Button} from '@mui/material';
+import { TextField, Button } from '@mui/material';
 
 type FormData = {
     username: string;
@@ -14,8 +14,8 @@ type State = {
     submitted: boolean;
 };
 
-class Login extends Component<{},State> {
-    constructor(props:{}) {
+class Login extends Component<{}, State> {
+    constructor(props: {}) {
         super(props);
         this.state = {
             formData: { username: '', email: '', password: '' },
@@ -57,7 +57,6 @@ class Login extends Component<{},State> {
             alert("field not match")
         }
 
-
         // this.setState(
         //   (prevState) => ({
         //     submittedData: [...prevState.submittedData, prevState.formData],
@@ -71,7 +70,7 @@ class Login extends Component<{},State> {
     };
 
     render() {
-        const { formData} = this.state;
+        const { formData } = this.state;
 
         return (
             <div>
@@ -109,21 +108,10 @@ class Login extends Component<{},State> {
                     <Button type="submit" variant="contained" color="primary" fullWidth>
                         Submit
                     </Button>
+
+                    <a href='http://localhost:3000/forget'>Forget page</a>
                 </form>
-                {/* {submitted && (
-          <div>
-            <Typography variant="h6" component="h2" gutterBottom>
-              Submitted Data
-            </Typography>
-            {submittedData.map((data, index) => (
-              <div key={index}>
-                <Typography>Username: {data.username}</Typography>
-                <Typography>Email: {data.email}</Typography>
-                <Typography>Password: {data.password}</Typography>
-              </div>
-            ))}
-          </div>
-        )} */}
+
             </div>
         );
 

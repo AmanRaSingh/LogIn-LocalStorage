@@ -112,6 +112,8 @@ class Login extends Component<{}, State> {
                     <a href='http://localhost:3000/forget'>Forget page</a>
                 </form>
 
+               
+
             </div>
         );
 

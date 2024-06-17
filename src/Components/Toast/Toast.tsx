@@ -45,7 +45,7 @@ export default class Toast extends Component<{}, ShowData> {
         setTimeout(() => {
 
             this.setState({ cancelMessage: "" })
-        }, 5000)
+        }, 3000)
     };
 
     render() {

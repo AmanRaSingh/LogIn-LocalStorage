@@ -39,7 +39,7 @@ class Registration extends Component<{}, State> {
     const { name, value } = e.target;
     this.setState((prevState) => ({
       formData: { ...prevState.formData, [name]: value },
-      errors: { ...prevState.errors, [name]: '' }, 
+      errors: { ...prevState.errors, [name]: '' },
     }));
   };
 
@@ -63,6 +63,7 @@ class Registration extends Component<{}, State> {
 
   formValidation = (): boolean => {
     const { username, email, password } = this.state.formData;
+    const { submittedData } = this.state;
     const errors: FormData = { username: '', email: '', password: '' };
     let isValid = true;
 
@@ -70,14 +71,23 @@ class Registration extends Component<{}, State> {
       errors.username = 'Username is required';
       isValid = false;
     }
+    else if (submittedData.some((data)=>data.username===username)){
+      errors.username="Username already exist";
+      isValid=false;
+    }
     if (email === '') {
       errors.email = 'Email is required';
       isValid = false;
     }
+    else if (submittedData.some((data) => data.email === email)) {
+      errors.email = 'Email already exist';
+      isValid = false;
+    }
     if (password === '') {
       errors.password = 'Password is required';
-      isValid= false;
+      isValid = false;
     }
+    
     this.setState({ errors });
     return isValid;
   };

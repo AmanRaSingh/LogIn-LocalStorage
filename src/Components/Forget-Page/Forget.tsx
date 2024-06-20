@@ -1,5 +1,6 @@
-import { Button, TextField } from '@mui/material';
+
 import React, { Component } from 'react';
+import { Button, TextField } from '@mui/material';
 
 interface ForgetData {
     email: string;
@@ -11,6 +12,7 @@ interface ForgetData {
     generateOTP?: string;
     newPassword: string;
     confirmPassword: string;
+    data: string;
 }
 
 interface ForgetState {
@@ -27,6 +29,7 @@ export default class Forget extends Component<{}, ForgetState> {
                 num: "",
                 newPassword: "",
                 confirmPassword: "",
+                data: "",
                 submitted: false,
                 popup: false,
                 passwordPopup: false,
@@ -34,15 +37,14 @@ export default class Forget extends Component<{}, ForgetState> {
             submittedData: []
         };
     }
+
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("message", this.state.forgetData.email);
         const { forgetData, submittedData } = this.state;
-        const emailMatch = submittedData.some(
-            (data) => data.email === forgetData.email
-        );
+        const emailMatch = submittedData.some(data => data.email === forgetData.email);
+
         if (emailMatch) {
-            alert("email matched");
+            alert("Email matched");
             const generateOTP = (num: number) => {
                 let digits = '0123456789';
                 let OTP = '';
@@ -52,8 +54,7 @@ export default class Forget extends Component<{}, ForgetState> {
                 return OTP;
             };
             const generatedOTP = generateOTP(4);
-            console.log("generate OTP", generatedOTP);
-
+            console.log(generatedOTP)
             this.setState({
                 forgetData: {
                     ...forgetData,
@@ -62,10 +63,10 @@ export default class Forget extends Component<{}, ForgetState> {
                 },
             });
         } else {
-            alert("email not matched");
-            return null;
+            alert("Email not matched");
         }
     };
+
     handleOTPSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { forgetData } = this.state;
@@ -77,43 +78,61 @@ export default class Forget extends Component<{}, ForgetState> {
                     ...forgetData,
                     passwordPopup: true
                 }
-            })
-
+            });
         } else {
             alert("OTP not matched");
         }
     };
-
+    componentDidMount() {
+        const submittedData = localStorage.getItem('submittedData');
+        if (submittedData) {
+            this.setState({
+                submittedData: JSON.parse(submittedData)
+            });
+        }
+    }
     handleNewSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { forgetData } = this.state;
-
+        const { forgetData, submittedData } = this.state;
+    
         if (forgetData.newPassword === forgetData.confirmPassword) {
-            console.log("matched");
+            console.log("Password matched");
             console.log("New Password", this.state.forgetData.newPassword);
             console.log("Confirm Password", this.state.forgetData.confirmPassword);
+    
+            const updatedSubmittedData = submittedData.map(data => {
+                if (data.email === forgetData.email) {
+                    return {
+                        ...data,
+                    password: forgetData.newPassword
+                    };
+                }
+                return data;
+            });
+    
+            this.setState({
+                submittedData: updatedSubmittedData,
+                forgetData: {
+                    ...forgetData,
+                    passwordPopup: false
+                },
+            }, () => {
+                localStorage.setItem('submittedData', JSON.stringify(updatedSubmittedData));
+                alert("Password updated successfully.");
+            });
+    
         } else {
-            alert("Passwords do not match");
+            alert("Passwords do not match.");
         }
+    };
+    
 
-
-    }
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         this.setState({
             forgetData: { ...this.state.forgetData, [e.target.name]: e.target.value }
         });
     };
-
-
-    componentDidMount() {
-        const submittedData = localStorage.getItem('submittedData');
-        if (submittedData) {
-            this.setState({
-                submittedData: JSON.parse(submittedData),
-            });
-        }
-    }
 
     render() {
         return (
@@ -152,14 +171,18 @@ export default class Forget extends Component<{}, ForgetState> {
                         <TextField
                             label="New Password"
                             name="newPassword"
-                            fullWidth margin='normal'
+                            type="password"
+                            fullWidth
+                            margin='normal'
                             value={this.state.forgetData.newPassword}
                             onChange={this.handleChange}
                         />
                         <TextField
                             label='Confirm Password'
                             name='confirmPassword'
-                            fullWidth margin='normal'
+                            type="password"
+                            fullWidth
+                            margin='normal'
                             value={this.state.forgetData.confirmPassword}
                             onChange={this.handleChange}
                         />
@@ -170,3 +193,4 @@ export default class Forget extends Component<{}, ForgetState> {
         );
     }
 }
+
